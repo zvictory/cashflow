@@ -109,7 +109,7 @@ def prism(name, pts, plane, a0, a1):
     for i in range(n):
         j = (i + 1) % n
         bm.faces.new((bot[i], bot[j], top[j], top[i]))
-    bmesh.ops.triangulate(bm, faces=bm.faces[:])
+    bmesh.ops.triangulate(bm, faces=bm.faces[:], quad_method="BEAUTY", ngon_method="EAR_CLIP")
     return _link(name, bm)
 
 
@@ -291,7 +291,7 @@ def make_chassis():
     for s in (1, -1):
         cuts.append(box("seatS%d" % s, 69 - g, 71 + g, s * 10 - 6.5 - g, s * 10 + 6.5 + g, 23, 27))
     # direksiyon mili deligi
-    cuts.append(cyl("steerH", "z", (82, 10), 1.0 + g, 22, 27))
+    cuts.append(cyl("steerH", "z", (78, 10), 1.0 + g, 22, 27))
     # egzoz tirnak yuvasi
     cuts.append(box("exhS", 49 - 1 - g, 49 + 1 + g, 17.5 - 1 - g, 17.5 + 1 + g, 22.5, 27))
     # stop lambalari
@@ -391,9 +391,10 @@ def make_grille():
 
 def make_seat(side):
     s = 1 if side == "R" else -1
-    pts = [(63.5, 26), (69, 26), (69, 23.5), (71, 23.5), (71, 26), (76, 26), (76, 31.5),
-           (68.5, 31.5), (67.5, 46), (63.5, 46)]
+    pts = [(63.5, 26), (76, 26), (76, 31.5), (68.5, 31.5), (67.5, 46), (63.5, 46)]
     seat = prism("06_Seat_" + side, pts, "xz", s * 10 - 6.5, s * 10 + 6.5)
+    # alt tirnak ayri kutu (esdogrusal noktali profil hatali ucgenlenmesin)
+    union(seat, box("tab", 69, 71, s * 10 - 6.5, s * 10 + 6.5, 23.5, 26.3))
     # oturak/sirt oluklari (sadece gorsel)
     diff(seat, box("sg1", 70, 76.5, s * 10 - 0.4, s * 10 + 0.4, 30.9, 32),
          box("sg2", 63, 64.1, s * 10 - 0.4, s * 10 + 0.4, 30, 45))
@@ -401,13 +402,13 @@ def make_seat(side):
 
 
 def make_steering():
-    cx, cy, z0, z1 = 82.0, 10.0, 44.0, 45.6
-    st = cyl("07_SteeringWheel", "z", (cx, cy), 6.0, z0, z1)
-    diff(st, cyl("in", "z", (cx, cy), 4.8, z0 - 1, z1 + 1))
+    cx, cy, z0, z1 = 78.0, 10.0, 44.0, 45.6
+    st = cyl("07_SteeringWheel", "z", (cx, cy), 5.5, z0, z1)
+    diff(st, cyl("in", "z", (cx, cy), 4.4, z0 - 1, z1 + 1))
     parts = [cyl("hub", "z", (cx, cy), 1.8, z0, z1)]
     for k in range(3):
         a = math.radians(90 + 120 * k)
-        sp = box("sp%d" % k, 0, 5.4, -0.6, 0.6, z0, z1)
+        sp = box("sp%d" % k, 0, 4.9, -0.6, 0.6, z0, z1)
         sp.data.transform(Matrix.Translation((cx, cy, 0)) @ Matrix.Rotation(a, 4, "Z"))
         parts.append(sp)
     parts.append(cyl("col", "z", (cx, cy), 1.25, 26, z0 + 0.2))
@@ -493,11 +494,11 @@ def make_axle(name, x):
 
 def make_hinge(side):
     px, pz = PIVOT
-    prof = [(px - 3.6, 18), (px + 3.6, 18), (px + 3.6, pz)]
+    prof = [(px - 3.4, 18), (px + 3.4, 18), (px + 3.4, pz)]
     for i in range(1, 24):
         a = math.pi * i / 24
-        prof.append((px + 3.6 * math.cos(a), pz + 3.6 * math.sin(a)))
-    prof.append((px - 3.6, pz))
+        prof.append((px + 3.4 * math.cos(a), pz + 3.4 * math.sin(a)))
+    prof.append((px - 3.4, pz))
     h = prism("15_BedHinge_R", prof, "xz", 20.2, 23.2)
     union(h, box("tenon", -95, -91, 18.2, 20.5, 20, 24))
     diff(h, cyl("hole", "y", PIVOT, PIN_D / 2 + 0.15, 19, 24))

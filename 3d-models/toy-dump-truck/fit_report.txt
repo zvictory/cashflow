@@ -1,0 +1,68 @@
+== 1) Joint-by-joint fit check ==
+joint                                          target   measured    engaged  result
+Front axle  -> chassis bearing (rotates)       0.30mm     0.30mm      5.7mm  PASS
+Rear axle   -> chassis bearing (rotates)       0.30mm     0.30mm      5.7mm  PASS
+Wheel rim   -> axle, D-hole (press fit)        0.05mm     0.05mm      8.7mm  PASS
+Tire (TPU)  -> rim (stretch fit)               0.00mm     0.00mm     11.0mm  PASS
+Cabin pin   -> chassis hole                    0.10mm     0.10mm      4.9mm  PASS
+Cabin pin   -> cabin mount block               0.10mm     0.10mm      3.9mm  PASS
+Seat tab    -> chassis deck slot               0.15mm     0.15mm      2.4mm  PASS
+Steering peg-> chassis deck hole               0.15mm     0.15mm      2.2mm  PASS
+Grille      -> cabin front pocket              0.15mm     0.15mm      1.0mm  PASS
+Mirror peg  -> cabin side hole                 0.15mm     0.15mm      2.2mm  PASS
+Bumper tenon-> chassis rail mortise            0.15mm     0.15mm      4.4mm  PASS
+Exhaust peg -> chassis rail slot               0.15mm     0.15mm      3.1mm  PASS
+Hinge tenon -> chassis rail mortise            0.15mm     0.15mm      1.7mm  PASS
+Hinge pin   -> hinge bracket (free)            0.15mm     0.15mm      2.9mm  PASS
+Hinge pin   -> bed subframe (snug)             0.05mm     0.05mm      3.6mm  PASS
+
+== 2) Seating and functional gaps ==
+Bed subframe rests on chassis rails            target 0.00  measured 0.00 mm  PASS
+Cabin rests on chassis deck                    target 0.00  measured 0.00 mm  PASS
+Wheel hub boss to bearing block (side play)    target 0.30  measured 0.30 mm  PASS
+Bed floor above hinge (tip clearance)          target 0.60  measured 0.60 mm  PASS
+Hinge bracket to bed subframe (side)           target 0.70  measured 0.70 mm  PASS
+Tires free-running (min gap to body)           >= 0.50     measured 1.26 mm  PASS
+
+== 3) Assembly sequence simulation (sweep, step 0.25 mm) ==
+1. Axles slide through bearings (from +Y side)       PASS
+   rear axle 1                                       PASS
+   rear axle 2                                       PASS
+2. Tire onto rim, wheel 1 (right)                    PASS
+2. Tire onto rim, wheel 2 (left)                     PASS
+2. Tire onto rim, wheel 3 (right)                    PASS
+2. Tire onto rim, wheel 4 (left)                     PASS
+2. Tire onto rim, wheel 5 (right)                    PASS
+2. Tire onto rim, wheel 6 (left)                     PASS
+3. Wheel 1 onto axle end (right)                     PASS
+3. Wheel 2 onto axle end (left)                      PASS
+3. Wheel 3 onto axle end (right)                     PASS
+3. Wheel 4 onto axle end (left)                      PASS
+3. Wheel 5 onto axle end (right)                     PASS
+3. Wheel 6 onto axle end (left)                      PASS
+4. 06_Seat_R down into deck                          PASS
+4. 06_Seat_L down into deck                          PASS
+4. 07_SteeringWheel down into deck                   PASS
+4. 14b_PinCabin_R down into deck                     PASS
+4. 14b_PinCabin_L down into deck                     PASS
+5. Grille into cabin pocket (from front)             PASS
+6. Cabin (+grille) lowered onto pins                 PASS
+7. Right mirror into cabin                           PASS
+   Left mirror into cabin                            PASS
+8. Front bumper onto rail ends                       PASS
+9. Exhaust peg into rail slot                        PASS
+10. Right hinge into rail mortise                    PASS
+    Left hinge into rail mortise                     PASS
+11. Dump bed lowered between hinges                  PASS
+12. Right hinge pin through hinge + bed              PASS
+    Left hinge pin through hinge + bed               PASS
+
+== 4) Fit-test coupons (stl/fit_test/) ==
+T1_chassis_rear_crop.stl            38.0 x  56.0 x  16.0 mm  watertight=True
+T2_chassis_front_crop.stl           48.0 x  42.0 x  16.0 mm  watertight=True
+T3_bed_pivot_crop.stl               20.0 x  59.0 x  14.0 mm  watertight=True
+Print with T1-T3: 15_bed_hinge_right, 14a_pin_hinge (x1), 13_rear_axle (x1),
+10_wheel_rim (x1), 11_tire (x1), 14b_pin_cabin (x1), 06_seat (x1), 07_steering_wheel,
+04_front_bumper, 09_exhaust_pipe  -> tests every fit type before the full print.
+
+RESULT: ALL JOINTS AND ASSEMBLY STEPS PASS

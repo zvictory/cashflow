@@ -37,13 +37,40 @@ def to_manifold(tm):
 
 # 1) STL butunlugu ------------------------------------------------------------
 log("== 1) STL butunlugu (baski dosyalari) ==")
-for f in sorted(os.listdir(stl_dir)):
+for f in sorted(x for x in os.listdir(stl_dir) if x.endswith(".stl")):
     tm = trimesh.load(os.path.join(stl_dir, f))
     man = to_manifold(tm)
     good = tm.is_watertight and tm.is_winding_consistent and tm.volume > 0 and man.status() == m3d.Error.NoError
     ok &= good
     log("%-26s %s  hacim=%7.0f mm3  ucgen=%6d  zmin=%.2f" % (
         f, "OK " if good else "HATA", tm.volume, len(tm.faces), tm.bounds[0][2]))
+
+# 1b) Katlanmis / ust uste binen esduzlemsel ucgen kontrolu ----------------------
+# Su gecirmez ama hatali ucgenlenmis yuzeyler (sifir kalinlikli katlanma) slicer'da
+# sorun cikarir; ayni duzlemdeki ucgenlerin alan toplami birlesim alanina esit olmali.
+from shapely.geometry import Polygon
+from shapely.ops import unary_union
+
+log("\n== 1b) Yuzey katlanma (esduzlemsel ust uste binme) testi ==")
+for f in sorted(x for x in os.listdir(stl_dir) if x.endswith(".stl")):
+    tm = trimesh.load(os.path.join(stl_dir, f))
+    key = np.c_[np.round(tm.face_normals, 4), np.round((tm.face_normals * tm.triangles[:, 0]).sum(1), 3)]
+    _, inv = np.unique(key, axis=0, return_inverse=True)
+    excess = 0.0
+    for g in np.unique(inv):
+        idx = np.where(inv == g)[0]
+        if len(idx) < 2:
+            continue
+        n = tm.face_normals[idx[0]]
+        u = np.cross(n, [1, 0, 0] if abs(n[0]) < 0.9 else [0, 1, 0])
+        u /= np.linalg.norm(u)
+        v = np.cross(n, u)
+        polys = [Polygon(np.c_[t @ u, t @ v]) for t in tm.triangles[idx]]
+        polys = [pg for pg in polys if pg.area > 1e-9]
+        excess += sum(pg.area for pg in polys) - unary_union(polys).area
+    good = excess < 0.01
+    ok &= good
+    log("%-26s %s  fazla alan=%.4f mm2" % (f, "OK " if good else "HATA", excess))
 
 # 2) Montaj cakismasi ---------------------------------------------------------
 log("\n== 2) Montaj cakisma testi (kesisim hacmi, mm3) ==")
@@ -97,7 +124,7 @@ for deg in (10, 20, 30, 40, 45, 50):
 # 4) Sarkma analizi ---------------------------------------------------------
 log("\n== 4) Sarkma analizi (baski yonunde, tabla z=0 haric) ==")
 log("%-26s %12s %12s   %s" % ("dosya", ">45deg mm2", "kopru mm2", "en buyuk kopru bolgesi"))
-for f in sorted(os.listdir(stl_dir)):
+for f in sorted(x for x in os.listdir(stl_dir) if x.endswith(".stl")):
     tm = trimesh.load(os.path.join(stl_dir, f))
     n = tm.face_normals
     c = tm.triangles_center

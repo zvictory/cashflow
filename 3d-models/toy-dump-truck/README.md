@@ -20,9 +20,10 @@ Damper kasası mafsal pimleri üzerinde **45°+ kalkar**, tekerlekler akslarla b
 | `dump_truck.py` | Tüm geometriyi üreten parametrik Blender betiği (ölçüler/toleranslar en üstte) |
 | `dump_truck.blend` | Blender dosyası: `Assembly` (montajlı) ve `Print_Plate` (baskı yönünde dizili) koleksiyonları |
 | `stl/` | Baskı yönüne çevrilmiş, tablaya oturtulmuş (z=0) STL dosyaları |
-| `validate.py` | Manifold / çakışma / damper devirme / sarkma testleri |
+| `validate.py` | Manifold / katlanma / çakışma / damper devirme / sarkma testleri |
+| `fit_check.py` | Parça parça geçme ölçümü, montaj sırası simülasyonu, test numuneleri (`stl/fit_test/`) |
 | `render.py` | Önizleme görselleri (`renders/`) |
-| `parts_report.txt`, `validation_report.txt` | Ölçü ve test raporları |
+| `parts_report.txt`, `validation_report.txt`, `fit_report.txt` | Ölçü ve test raporları |
 
 ## Parça listesi ve baskı ayarları
 
@@ -88,14 +89,53 @@ Yazıcınız delikleri dar basıyorsa `dump_truck.py` içindeki `FIT` değerini 
 ## Doğrulama (validate.py)
 
 - **Manifold:** 18 STL dosyasının hepsi su geçirmez, normaller tutarlı, hacim pozitif.
+- **Yüzey katlanması:** Hiçbir parçada üst üste binen / katlanmış eşdüzlemsel üçgen yok.
 - **Montaj çakışması:** 32 parça arasında en büyük kesişim **0.0000 mm³**.
 - **Damper devirme:** 0°–50° arası kasa; şasi, kabin, tekerlekler ve menteşelerle **çakışmıyor**.
 - **Ölçü:** 200.0 × 70.0 × 80.0 mm (aynalar hariç).
 - **Sarkma:** Parçalarda 45°'den dik serbest sarkma yok; kalan yatay köprüler kısa
   (kabin camları ≤ 25.5 mm, kasa altı 15 mm, jant çanağı Ø14 mm) – destek gerektirmez.
 
-> Not: Doğrulama geometriktir. İlk baskıda tolerans/kalibrasyon için önce küçük parçaları
-> (pim + menteşe, aks + jant) test basmanız önerilir.
+## Parça parça geçme doğrulaması (fit_check.py)
+
+Her birleşim ayrı ayrı ölçülür (rapor: `fit_report.txt`):
+
+| Birleşim | Hedef boşluk | Ölçülen | Geçme boyu | Sonuç |
+|---|---|---|---|---|
+| Ön/arka aks → şasi yatağı (döner) | 0.30 | 0.30 | 5.7 mm | ✅ |
+| Jant → aks, D-delik (pres) | 0.05 | 0.05 | 8.7 mm | ✅ |
+| Lastik (TPU) → jant | 0.00 | 0.00 | 11.0 mm | ✅ |
+| Kabin pimi → şasi / kabin bloğu | 0.10 | 0.10 | 4.9 / 3.9 mm | ✅ |
+| Koltuk tırnağı → platform yuvası | 0.15 | 0.15 | 2.4 mm | ✅ |
+| Direksiyon mili → platform deliği | 0.15 | 0.15 | 2.2 mm | ✅ |
+| Izgara → kabin cebi | 0.15 | 0.15 | 1.2 mm | ✅ |
+| Ayna tırnağı → kabin deliği | 0.15 | 0.15 | 2.2 mm | ✅ |
+| Tampon tırnağı → ray yuvası | 0.15 | 0.15 | 4.4 mm | ✅ |
+| Egzoz tırnağı → ray yuvası | 0.15 | 0.15 | 3.1 mm | ✅ |
+| Menteşe tırnağı → ray yuvası | 0.15 | 0.15 | 1.7 mm | ✅ |
+| Mafsal pimi → menteşe (serbest) / kasa (sıkı) | 0.15 / 0.05 | 0.15 / 0.05 | 2.9 / 3.6 mm | ✅ |
+
+Fonksiyonel boşluklar: kasa ve kabin şasiye tam oturuyor (0.00), tekerlek yan boşluğu 0.30,
+kasa–menteşe devirme boşluğu 0.60, lastik–gövde en yakın mesafe 1.26 mm.
+
+**Montaj sırası simülasyonu:** Her parça gerçek takılma yönünde 0.25 mm adımlarla kaydırılıp
+önceden takılmış parçalarla çarpışma kontrol edildi – 31 adımın tamamı geçti
+(akslar → lastik/jant → tekerlekler → koltuk/direksiyon/pim → ızgara → kabin → ayna/tampon/egzoz →
+menteşe → kasa → mafsal pimleri).
+
+### Önce test baskısı (önerilir)
+
+`stl/fit_test/` klasöründe gerçek parçalardan kesilmiş küçük test numuneleri var:
+
+| Dosya | Test ettiği |
+|---|---|
+| `T1_chassis_rear_crop.stl` | Arka aks yatağı, menteşe yuvası |
+| `T2_chassis_front_crop.stl` | Ön aks yatağı, kabin pimi, koltuk/direksiyon yuvası, tampon ve egzoz yuvası |
+| `T3_bed_pivot_crop.stl` | Kasa mafsal deliği |
+
+Bunlarla birlikte 1 menteşe, 1 mafsal pimi, 1 aks, 1 jant, 1 lastik, 1 kabin pimi, 1 koltuk,
+direksiyon, tampon ve egzozu basın (~1–1.5 saat). Hepsi rahat geçiyorsa tüm modeli basın;
+sıkıysa `FIT` değerini 0.2–0.25 yapıp yeniden üretin.
 
 ## Yeniden üretme
 
@@ -104,6 +144,7 @@ pip install bpy trimesh manifold3d   # python dump_truck.py -- .  ile de çalı�
 # Blender 4.2+ kurulu ise:
 blender --background --python dump_truck.py -- .
 python validate.py .
+python fit_check.py .
 blender --background dump_truck.blend --python render.py -- .
 ```
 
