@@ -1,0 +1,56 @@
+== 1) STL butunlugu (baski dosyalari) ==
+01_cabin.stl               OK   hacim=  28671 mm3  ucgen=  1402  zmin=0.00
+02_chassis.stl             OK   hacim=  33750 mm3  ucgen=  3292  zmin=0.00
+03_dump_bed.stl            OK   hacim=  74587 mm3  ucgen=  1448  zmin=0.00
+04_front_bumper.stl        OK   hacim=   4106 mm3  ucgen=   176  zmin=0.00
+05_grille.stl              OK   hacim=    817 mm3  ucgen=   234  zmin=0.00
+06_seat_x2.stl             OK   hacim=   1797 mm3  ucgen=    76  zmin=0.00
+07_steering_wheel.stl      OK   hacim=    196 mm3  ucgen=  1322  zmin=0.00
+08_mirror_left.stl         OK   hacim=    165 mm3  ucgen=    66  zmin=0.00
+08_mirror_right.stl        OK   hacim=    165 mm3  ucgen=    66  zmin=0.00
+09_exhaust_pipe.stl        OK   hacim=    818 mm3  ucgen=   212  zmin=0.00
+10_wheel_rim_x6.stl        OK   hacim=   3496 mm3  ucgen=  1826  zmin=0.00
+11_tire_x6_TPU.stl         OK   hacim=   4962 mm3  ucgen=  1440  zmin=0.00
+12_front_axle.stl          OK   hacim=   1094 mm3  ucgen=   192  zmin=0.00
+13_rear_axle_x2.stl        OK   hacim=   1094 mm3  ucgen=   192  zmin=0.00
+14a_pin_hinge_x2.stl       OK   hacim=     81 mm3  ucgen=   252  zmin=0.00
+14b_pin_cabin_x2.stl       OK   hacim=     63 mm3  ucgen=   124  zmin=0.00
+15_bed_hinge_left.stl      OK   hacim=    326 mm3  ucgen=   476  zmin=0.00
+15_bed_hinge_right.stl     OK   hacim=    326 mm3  ucgen=   476  zmin=0.00
+
+== 2) Montaj cakisma testi (kesisim hacmi, mm3) ==
+En buyuk kesisim: 0.0000 mm3 (esik 0.05)
+
+Montaj olculeri (aynalar dahil): 200.0 x 75.0 x 80.0 mm
+Montaj olculeri (aynalar haric): 200.0 x 70.0 x 80.0 mm
+
+== 3) Damper devirme testi (mafsal x=-93, z=30) ==
+10 derece: temiz
+20 derece: temiz
+30 derece: temiz
+40 derece: temiz
+45 derece: temiz
+50 derece: temiz
+
+== 4) Sarkma analizi (baski yonunde, tabla z=0 haric) ==
+dosya                        >45deg mm2    kopru mm2   en buyuk kopru bolgesi
+01_cabin.stl                      459.6        518.8   2.0 x 25.5 @z=24.0
+02_chassis.stl                    134.5         81.7   4.7 x 2.8 @z=6.2
+03_dump_bed.stl                    39.9       3137.2   146.0 x 48.0 @z=8.0
+04_front_bumper.stl               105.4        188.6   4.5 x 18.0 @z=0.6
+05_grille.stl                       0.0          0.0   -
+06_seat_x2.stl                      0.0         14.5   0.6 x 15.0 @z=6.9
+07_steering_wheel.stl               0.0          0.0   -
+08_mirror_left.stl                  0.0          0.0   -
+08_mirror_right.stl                 0.0          0.0   -
+09_exhaust_pipe.stl                 0.0          6.4   3.2 x 2.0 @z=1.0
+10_wheel_rim_x6.stl                 0.0        153.7   14.0 x 14.0 @z=1.6
+11_tire_x6_TPU.stl                  0.0         65.3   2.4 x 1.1 @z=5.7
+12_front_axle.stl                  62.0          0.0   -
+13_rear_axle_x2.stl                62.0          0.0   -
+14a_pin_hinge_x2.stl                0.0          0.0   -
+14b_pin_cabin_x2.stl                0.0          0.0   -
+15_bed_hinge_left.stl               0.0          0.0   -
+15_bed_hinge_right.stl              0.0          0.0   -
+
+SONUC: TUM TESTLER GECTI

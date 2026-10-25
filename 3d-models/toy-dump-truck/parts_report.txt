@@ -1,0 +1,19 @@
+dosya;adet;X;Y;Z (mm, baski yonunde)
+01_cabin.stl;1;42.0;64.0;50.0
+02_chassis.stl;1;194.0;59.0;16.0
+03_dump_bed.stl;1;156.0;68.0;54.0
+04_front_bumper.stl;1;11.0;64.0;10.5
+05_grille.stl;1;14.0;40.0;2.0
+06_seat_x2.stl;2;12.5;22.5;13.0
+07_steering_wheel.stl;1;12.0;12.0;22.6
+08_mirror_right.stl;1;21.0;8.3;2.5
+08_mirror_left.stl;1;21.0;8.3;2.5
+09_exhaust_pipe.stl;1;39.2;17.5;4.0
+10_wheel_rim_x6.stl;6;22.5;22.5;14.7
+11_tire_x6_TPU.stl;6;32.0;32.0;11.0
+12_front_axle.stl;1;5.0;58.0;4.6
+13_rear_axle_x2.stl;2;5.0;58.0;4.6
+14a_pin_hinge_x2.stl;2;5.5;5.5;8.7
+14b_pin_cabin_x2.stl;2;3.0;3.0;9.0
+15_bed_hinge_right.stl;1;7.2;15.6;5.0
+15_bed_hinge_left.stl;1;7.2;15.6;5.0
